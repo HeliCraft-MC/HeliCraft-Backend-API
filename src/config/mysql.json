@@ -1,0 +1,19 @@
+{
+    "mysql": {
+        "host": "localhost",
+        "port": 3306,
+        "user":{
+            "name": "root",
+            "password": "root"
+        },
+        "database": {
+            "name": "helicraft",
+            "table": "users",
+            "columns": {
+                "username": "username",
+                "password": "password"
+            }
+        }
+
+    }
+}

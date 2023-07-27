@@ -1,0 +1,11 @@
+{
+    "config": {
+        "host": "localhost",
+        "port": 3300,
+        "name": "HeliCraft Site Backend Service",
+        "secret": "secret"
+    },
+    "doNotChange": {
+        "version": "0.0.1"
+    }
+}

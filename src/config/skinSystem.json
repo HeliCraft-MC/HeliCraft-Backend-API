@@ -1,0 +1,7 @@
+{
+    "skins":{
+        "path": "storage/skins",
+        "nameFormat": "%s",
+        "type": "png"
+    }
+}
