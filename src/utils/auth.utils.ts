@@ -11,9 +11,9 @@ import { createToken } from "./token.utils";
  * @param {string} secret - The secret used to create the token.
  * @return {any} The authentication token if the provided credentials are valid, otherwise false.
  */
-export function proccessAuth(username:string, password:string, secret:string):any{
+export async function proccessAuth(username:string, password:string, secret:string):Promise<any>{
     const result = checkPassword(username, password);
-    if(result){
+    if(await result){
         const token = createToken(username, password, secret);
         return token;
     }

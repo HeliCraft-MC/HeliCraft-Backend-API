@@ -1,17 +1,17 @@
 {
     "mysql": {
         "host": "localhost",
-        "port": 3306,
+        "port": 3310,
         "user":{
             "name": "root",
             "password": "root"
         },
         "database": {
-            "name": "helicraft",
-            "table": "users",
+            "name": "newAuth",
+            "table": "AUTH",
             "columns": {
-                "username": "username",
-                "password": "password"
+                "username": "NICKNAME",
+                "password": "HASH"
             }
         }
 

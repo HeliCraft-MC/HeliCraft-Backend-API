@@ -19,11 +19,14 @@ function createToken(username:string, password:string, secret:string):string{
  * @param {string} secret - The secret used to verify the token.
  * @return {boolean} Returns true if the token is valid, false otherwise.
  */
-function verifyToken(token:string, secret:string):boolean{
-    if(jwt.verify(token, secret)){
-        return true;
-    }
-    return false;
+function verifyToken(token: string, secret: string): boolean {
+  try {
+    jwt.verify(token, secret);
+    return true; // Token is valid
+  } catch (error) {
+    return false; // Token is invalid
+  }
 }
+
 
 export { createToken, verifyToken };
