@@ -3,12 +3,25 @@ import findUser from "./findUser";
 import bcrypt from "bcrypt";
 
 
-async function givePassword(username:string): Promise<string> {
+async function givePassword(username: string): Promise<string> {
+    console.log(username);
     const user = await findUser(username);
-    const HASH = eval(`user.${database.database.columns.password}`);
+    console.log(user);
+  
+    if (!user) {
+      throw new Error('User not found');
+    }
+  
+    const passwordProperty = database.database.columns.password;
+    const HASH = eval(`user.${passwordProperty}`);
+    console.log(HASH);
+  
+    if (!HASH) {
+      throw new Error('Password not found');
+    }
+  
     return HASH;
   }
-  
 
 /**
  * Validates the password for a given username.
@@ -18,6 +31,7 @@ async function givePassword(username:string): Promise<string> {
  * @return {boolean} Returns true if the password is valid, false otherwise.
  */
 export default async function validatePassword(username: string, password: string): Promise<boolean> {
+  console.log(username);
   const HASH = await givePassword(username);
   const result = bcrypt.compareSync(password, HASH);
   return result;

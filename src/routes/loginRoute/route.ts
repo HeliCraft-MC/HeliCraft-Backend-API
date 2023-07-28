@@ -15,22 +15,32 @@ const router = Router();
 
 router.post('/auth', async (req: Request, res: Response) => {
     const args = req.body;
-    if(args.request == "login"){
-        const result = await proccessAuth(args.username, args.password, mainConfig.config.secret);
-        if(!result) {
-            res.status(401).send();
+    if (args.request == "login") {
+        console.log(args);
+        if (args.nickname && args.password) {
+            const result = await proccessAuth(args.nickname, args.password, mainConfig.config.secret);
+            if (!result) {
+                res.status(401).send();
+            } else {
+                res.status(200).send({
+                    token: result,
+                    username: args.nickname,
+                    expiresIn: '7d'
+                });
+            }
         } else {
-            res.status(200).send(result);
+            res.status(400).send();
         }
-    } else if (args.request == "validate"){
+    } else if (args.request == "validate") {
         const result = verifyToken(args.token, mainConfig.config.secret);
-        if(!result) {
+        if (!result) {
             res.status(401).send();
         } else {
             res.status(200).send();
         }
     }
 });
+
 
 router.get('/docs/auth', (req: Request, res: Response) => {
     

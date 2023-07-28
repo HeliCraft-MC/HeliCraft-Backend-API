@@ -8,6 +8,11 @@ const port = mainConfig.config.port;
 const express = require('express');
 const app: Application = express();
 
+//cors
+import cors from 'cors';
+
+app.use(cors());
+
 
 app.use(express.urlencoded({ extended: true }));
 
