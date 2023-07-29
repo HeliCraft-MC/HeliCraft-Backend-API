@@ -8,20 +8,24 @@ import connection from './mysqlConnect';
  * @param {string} username - The username of the user to find.
  * @return {Promise<mysql.RowDataPacket | null>} A promise that resolves with the user object if found, or null if not found.
  */
-export default async function (username: string): Promise<mysql.RowDataPacket | null> {
+export default async function getUserByUsername(username: string): Promise<mysql.RowDataPacket | null> {
   try {
     const result = await new Promise<mysql.RowDataPacket[]>((resolve, reject) => {
-      connection.execute(`SELECT * FROM ${database.database.table} WHERE ${database.database.columns.username} = ?`, [username], (err, result: mysql.RowDataPacket[]) => {
-        if (err) {
-          console.log(err);
-          reject(err);
-        } else {
-          resolve(result);
+      connection.execute(
+        `SELECT * FROM ${database.database.table} WHERE ${database.database.columns.username} = ?`,
+        [username],
+        (err, result: mysql.RowDataPacket[]) => {
+          if (err) {
+            console.log(err);
+            reject(err);
+          } else {
+            resolve(result);
+          }
         }
-      });
+      );
     });
-    console.log("Result " + result);
-    if (result[0]) {
+
+    if (result.length > 0) {
       return result[0];
     } else {
       return null;
@@ -30,4 +34,3 @@ export default async function (username: string): Promise<mysql.RowDataPacket | 
     throw error;
   }
 }
-

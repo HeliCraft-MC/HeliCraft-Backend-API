@@ -2,26 +2,29 @@ import database from "../database.config";
 import findUser from "./findUser";
 import bcrypt from "bcrypt";
 
-
+/**
+ * Retrieves the password for a given username.
+ *
+ * @param {string} username - The username for which to retrieve the password.
+ * @return {Promise<string>} The password associated with the given username.
+ */
 async function givePassword(username: string): Promise<string> {
-    console.log(username);
-    const user = await findUser(username);
-    console.log(user);
-  
-    if (!user) {
-      throw new Error('User not found');
-    }
-  
-    const passwordProperty = database.database.columns.password;
-    const HASH = eval(`user.${passwordProperty}`);
-    console.log(HASH);
-  
-    if (!HASH) {
-      throw new Error('Password not found');
-    }
-  
-    return HASH;
+  console.log(username);
+  const user = await findUser(username);
+
+  if (!user) {
+    throw new Error('User not found');
   }
+
+  const passwordProperty = database.database.columns.password;
+  const HASH = user[passwordProperty];
+
+  if (!HASH) {
+    throw new Error('Password not found');
+  }
+
+  return HASH;
+}
 
 /**
  * Validates the password for a given username.
@@ -33,6 +36,6 @@ async function givePassword(username: string): Promise<string> {
 export default async function validatePassword(username: string, password: string): Promise<boolean> {
   console.log(username);
   const HASH = await givePassword(username);
-  const result = bcrypt.compareSync(password, HASH);
+  const result = await bcrypt.compare(password, HASH);
   return result;
 }

@@ -5,46 +5,47 @@ import { verifyToken } from '../../utils/token.utils';
 import markdown from 'markdown-it';
 
 const md = new markdown({
-    html: true,
-    linkify: true,
-    breaks: true
+  html: true,
+  linkify: true,
+  breaks: true
 });
-
 
 const router = Router();
 
+// Authentication route
 router.post('/auth', async (req: Request, res: Response) => {
-    const args = req.body;
-    if (args.request == "login") {
-        console.log(args);
-        if (args.nickname && args.password) {
-            const result = await proccessAuth(args.nickname, args.password, mainConfig.config.secret);
-            if (!result) {
-                res.status(401).send();
-            } else {
-                res.status(200).send({
-                    token: result,
-                    username: args.nickname,
-                    expiresIn: '7d'
-                });
-            }
-        } else {
-            res.status(400).send();
-        }
-    } else if (args.request == "validate") {
-        const result = verifyToken(args.token, mainConfig.config.secret);
-        if (!result) {
-            res.status(401).send();
-        } else {
-            res.status(200).send();
-        }
+  const { request, username, password, token } = req.body;
+
+  if (request === "login") {
+    if (username && password) {
+      const result = await proccessAuth(username, password, mainConfig.config.secret);
+
+      if (!result) {
+        res.status(401).send();
+      } else {
+        res.status(200).send({
+          token: result,
+          username: username,
+          expiresIn: '7d'
+        });
+      }
+    } else {
+      res.status(400).send();
     }
+  } else if (request === "validate") {
+    const result = verifyToken(token, mainConfig.config.secret);
+
+    if (!result) {
+      res.status(401).send();
+    } else {
+      res.status(200).send();
+    }
+  }
 });
 
-
+// Documentation route
 router.get('/docs/auth', (req: Request, res: Response) => {
-    
-    const inputString = `## POST /auth
+  const inputString = `## POST /auth
 
 Authenticates a user or validates a token.
 
@@ -73,12 +74,13 @@ If the request is for token validation:
 
 - If the token is valid, the response will have a 200 status code.
 - If the token is invalid, the response will have a 401 status code.`;
-const formattedText = inputString
-  .split('\n') // Split the string into individual lines
-  .map(line => md.render(line)) // Apply markdown formatting to each line
-  .join('\n'); // Join the lines back together
-/* End of ChatGPT-Thanks *****LOL***** */
-res.send(formattedText);
-})
+
+  const formattedText = inputString
+    .split('\n')
+    .map(line => md.render(line))
+    .join('\n');
+
+  res.send(formattedText);
+});
 
 export default router;
