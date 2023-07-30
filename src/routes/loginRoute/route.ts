@@ -14,18 +14,18 @@ const router = Router();
 
 // Authentication route
 router.post('/auth', async (req: Request, res: Response) => {
-  const { request, username, password, token } = req.body;
+  const { request, nickname, password, token } = req.body;
 
   if (request === "login") {
-    if (username && password) {
-      const result = await proccessAuth(username, password, mainConfig.config.secret);
+    if (nickname && password) {
+      const result = await proccessAuth(nickname, password, mainConfig.config.secret);
 
       if (!result) {
         res.status(401).send();
       } else {
         res.status(200).send({
           token: result,
-          username: username,
+          username: nickname,
           expiresIn: '7d'
         });
       }

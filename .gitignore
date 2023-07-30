@@ -1,3 +1,5 @@
 node_modules
-src/config/mysql.json
+src/config/
 build
+temp
+src/config/*
