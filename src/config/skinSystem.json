@@ -1,6 +1,6 @@
 {
     "skins":{
-        "path": "path/from/root",
+        "path": "C:\\Users\\zxcvb\\Downloads\\ttemp",
         "fromRoot": false,
         "nameFormat": "%s",
         "type": "png"
