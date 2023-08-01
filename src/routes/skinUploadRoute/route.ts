@@ -7,8 +7,6 @@ import sharp from 'sharp';
 
 const router = Router();
 const skinPath = skinConfig.skins.path;
-const toRoot = skinConfig.skins.fromRoot;
-
 const upload = multer({
   dest: 'temp/', // Temporary directory to store uploaded files
   limits: {

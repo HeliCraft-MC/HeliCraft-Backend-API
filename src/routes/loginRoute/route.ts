@@ -2,13 +2,16 @@ import { Router, Request, Response } from 'express';
 import mainConfig from '../../config/main.json';
 import { proccessAuth } from '../../utils/auth.utils';
 import { verifyToken } from '../../utils/token.utils';
-import markdown from 'markdown-it';
 
-const md = new markdown({
-  html: true,
-  linkify: true,
-  breaks: true
+const md = require('markdown-it')()
+.use(require('markdown-it-multimd-table'), {
+  multiline:  true,
+  rowspan:    false,
+  headerless: false,
+  multibody:  true,
+  aotolabel:  true,
 });
+
 
 const router = Router();
 
@@ -45,42 +48,44 @@ router.post('/auth', async (req: Request, res: Response) => {
 
 // Documentation route
 router.get('/docs/auth', (req: Request, res: Response) => {
-  const inputString = `## POST /auth
+  const inputString = `## Route: POST /auth
 
-Authenticates a user or validates a token.
+  Authenticates the user based on the provided credentials or validates an existing token.
+  
+  ### Request Body
+  - \`request\` (string): The type of authentication request. Possible values: "login", "validate".
+  - \`nickname\` (string): The nickname of the user.
+  - \`password\` (string): The password of the user.
+  - \`token\` (string): The authentication token to be validated.
+  
+  ### Response
+  - If the request is "login" and the provided nickname and password are valid:
+    - Status code: 200 (OK)
+    - Body: A JSON object with the following properties:
+      - \`token\` (string): The authentication token.
+      - \`username\` (string): The nickname of the user.
+      - \`expiresIn\` (string): The expiration duration of the token.
+  
+  - If the request is "login" and the provided nickname and password are invalid:
+    - Status code: 401 (Unauthorized)
+  
+  - If the request is "validate" and the provided token is valid:
+    - Status code: 200 (OK)
+  
+  - If the request is "validate" and the provided token is invalid:
+    - Status code: 401 (Unauthorized)
+  
+  - If the request is missing any required parameters:
+    - Status code: 400 (Bad Request)
+  
+  ### Example
+  \`\`\`http POST /auth\`\`\`
 
-### Request Body
+  \`\`\`{ "request": "login", "nickname": "exampleuser", "password": "examplepassword" }\`\`\`
 
-| Name     | Type   | Description                          |
-|----------|--------|--------------------------------------|
-| request  | string | The type of authentication request.   |
-| username | string | The username for authentication.      |
-| password | string | The password for authentication.      |
-| token    | string | The token to be validated. (optional) |
-
-### Response
-
-| HTTP Status Code | Description                        |
-|------------------|------------------------------------|
-| 200              | Authentication or validation successful. |
-| 401              | Authentication or validation failed.     |
-
-If the request is for login authentication:
-
-- If the authentication is successful, the response body will contain an authentication token.
-- If the authentication fails, the response will have a 401 status code.
-
-If the request is for token validation:
-
-- If the token is valid, the response will have a 200 status code.
-- If the token is invalid, the response will have a 401 status code.`;
-
-  const formattedText = inputString
-    .split('\n')
-    .map(line => md.render(line))
-    .join('\n');
-
-  res.send(formattedText);
+  ### Response
+  \`json { "token": "exampletoken", "username": "exampleuser", "expiresIn": "7d" }\` `;
+  res.send(md.render(inputString));
 });
 
 export default router;

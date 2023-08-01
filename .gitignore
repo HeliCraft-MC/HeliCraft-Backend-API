@@ -1,5 +1,10 @@
 node_modules
+src/config/skinSystem.json
 src/config/
 build
 temp
 src/config/*
+/src/config/*
+/src/config
+config
+src/config/skinSystem.json
