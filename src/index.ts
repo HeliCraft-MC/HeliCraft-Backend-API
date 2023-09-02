@@ -11,7 +11,9 @@ const app: Application = express();
 //cors
 import cors from 'cors';
 
-app.use(cors());
+app.use(cors({
+    origin: ["https://helicraft.ru","https://vuebeta.helicraft.ru", "https://localhost:3000", "http://localhost:3000", "http://localhost:5173/", "https://localhost:5173"],
+}));
 
 
 app.use(express.urlencoded({ extended: true }));
