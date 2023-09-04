@@ -4,6 +4,7 @@ import mainConfig from '../../config/main.json';
 import { verifyToken } from '../../utils/token.utils';
 import multer from 'multer';
 import sharp from 'sharp';
+import axios from 'axios';
 
 const router = Router();
 const skinPath = skinConfig.skins.path;
@@ -47,6 +48,13 @@ router.post('/skin/upload', upload.single('file'), async (req: Request, res: Res
       .toFile(`${skinPath}/${req.body.nickname}.png`);
 
     res.status(200).json({ message: 'File uploaded successfully' });
+
+    //integration for HeliCraftAutoSkin by Ktilis
+    axios.get(`localhost:4418/update?player=${req.body.nickname}`).then((response) => {
+      if(response.status === 200) return;
+    }).catch((err) => {
+      console.warn(err);
+    })
   } catch (err) {
     next(err);
   }
