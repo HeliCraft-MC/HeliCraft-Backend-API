@@ -7,8 +7,8 @@ const connection = mysql.createConnection(connectionUri);
 console.log("Connected!");
 
 // Create tables if they do not exist
-const createTablesQuery = `
-  CREATE TABLE IF NOT EXISTS ${database.tablePassport} (
+const createTablesQueries = [
+  `CREATE TABLE IF NOT EXISTS ${database.tablePassport} (
     passportId VARCHAR(255) PRIMARY KEY,
     nickname VARCHAR(255),
     passportIssuedBy VARCHAR(255),
@@ -16,23 +16,33 @@ const createTablesQuery = `
     issuedOn DATE,
     arrestedIn JSON,
     inPrison JSON
-  );
-
-  CREATE TABLE IF NOT EXISTS ${database.tableStates} (
+  );`,
+  `CREATE TABLE IF NOT EXISTS ${database.tableStates} (
     stateId VARCHAR(255) PRIMARY KEY,
     stateName VARCHAR(255),
     stateRuler VARCHAR(255),
     stateMembers JSON,
     statePolicemans JSON,
     diplomaticStatus JSON
-  );
-`;
+  );`
+];
 
-connection.query(createTablesQuery, (error) => {
+connection.connect((error) => {
   if (error) {
-    console.error('Error creating tables:', error);
+    console.error('Error connecting to MySQL:', error);
   } else {
-    console.log('Tables created successfully');
+    console.log('Connected to MySQL');
+
+    // Execute each create table query
+    createTablesQueries.forEach((query) => {
+      connection.query(query, (error) => {
+        if (error) {
+          console.error('Error creating tables:', error);
+        } else {
+          console.log('Tables created successfully');
+        }
+      });
+    });
   }
 });
 

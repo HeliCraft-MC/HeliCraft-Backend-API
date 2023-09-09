@@ -9,12 +9,48 @@ import connection from './mysqlConnect';
  * @param {string} username - The username of the user to find.
  * @return {Promise<Passport | null>} A promise that resolves with the user object if found, or null if not found.
  */
-export default async function getPassportByUsername(username: string): Promise<Passport | null> {
+export async function getPassportByUsername(username: string): Promise<Passport | null> {
   try {
     const result = await new Promise<mysql.RowDataPacket[]>((resolve, reject) => {
       connection.execute(
         `SELECT * FROM ${database.tablePassport} WHERE NICKNAME = ?`,
         [username],
+        (err, result: mysql.RowDataPacket[]) => {
+          if (err) {
+            console.log(err);
+            reject(err);
+          } else {
+            resolve(result);
+          }
+        }
+      );
+    });
+
+    if (result.length > 0) {
+      const passport: Passport = {
+        passportId: result[0].passportId,
+        nickname: result[0].nickname,
+        passportIssuedBy: result[0].passportIssuedBy,
+        stateOfIssue: result[0].stateOfIssue,
+        issuedOn: result[0].issuedOn,
+        arrestedIn: JSON.parse(result[0].arrestedIn),
+        inPrison: JSON.parse(result[0].inPrison),
+      };
+
+      return passport;
+    } else {
+      return null;
+    }
+  } catch (error) {
+    throw error;
+  }
+}
+export async function getPassportByPassportId(passportid: string): Promise<Passport | null> {
+  try {
+    const result = await new Promise<mysql.RowDataPacket[]>((resolve, reject) => {
+      connection.execute(
+        `SELECT * FROM ${database.tablePassport} WHERE passportId = ?`,
+        [passportid],
         (err, result: mysql.RowDataPacket[]) => {
           if (err) {
             console.log(err);
