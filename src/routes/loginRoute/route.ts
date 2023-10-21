@@ -18,6 +18,7 @@ const router = Router();
 // Authentication route
 router.post('/auth', async (req: Request, res: Response) => {
   const { request, nickname, password, token } = req.body;
+  console.log(req.body);
 
   if (request === "login") {
     if (nickname && password) {
