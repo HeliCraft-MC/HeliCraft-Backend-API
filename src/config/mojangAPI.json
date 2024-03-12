@@ -1,0 +1,22 @@
+{
+    "enabled": false,
+    "mysql": {
+        "host": "localhost",
+        "port": 3310,
+        "user":{
+            "name": "root",
+            "password": "root"
+        },
+        "database": {
+            "name": "newAuth",
+            "table": "AUTH",
+            "columns": {
+                "username": "NICKNAME",
+                "password": "HASH",
+                "UUID": "UUID",
+                "UUID_WR": "UUID_WR"
+            }
+        }
+
+    }
+}
