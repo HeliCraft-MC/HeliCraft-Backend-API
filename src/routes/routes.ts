@@ -9,8 +9,6 @@ import changePasswordRoute from "./changePasswordRoute/route";
 import mojangAPI_getUUIDByUsername from "../mojangAPI/username-to-uuid/route";
 import mojangAPI_getUsernameByUUID from "../mojangAPI/uuid-to-username/route";
 
-import newPassport from "../idenifySystem/routes/passport/NewPassportRoute/route";
-import getPassport from "../idenifySystem/routes/passport/GetPassportRoute/route";
 
 const router = Router();
 
@@ -24,8 +22,5 @@ router.use('/', changePasswordRoute);
 
 router.use('/', mojangAPI_getUUIDByUsername);
 router.use('/', mojangAPI_getUsernameByUUID);
-
-router.use('/', newPassport);
-router.use('/', getPassport);
 
 export default router;

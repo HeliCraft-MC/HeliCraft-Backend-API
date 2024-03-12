@@ -6,6 +6,15 @@ import multer from 'multer';
 import sharp from 'sharp';
 import axios from 'axios';
 
+const md = require('markdown-it')()
+.use(require('markdown-it-multimd-table'), {
+  multiline:  true,
+  rowspan:    false,
+  headerless: false,
+  multibody:  true,
+  aotolabel:  true,
+});
+
 const router = Router();
 const skinPath = skinConfig.skins.path;
 const upload = multer({
@@ -58,6 +67,38 @@ router.post('/skin/upload', upload.single('file'), async (req: Request, res: Res
   } catch (err) {
     next(err);
   }
+});
+
+router.get('/docs/skin/upload', (req: Request, res: Response) => {
+  const inputString = `## Route: POST /skin/upload
+
+  Uploads a skin image for the specified user.
+
+  ### Request Body
+  - \`nickname\` (string): The nickname of the user.
+  - \`token\` (string): The authentication token of the user.
+
+  ### Form Data
+  - \`file\`: The skin image file to be uploaded.
+
+  ### Response
+  - If the file is successfully uploaded and the token is valid:
+    - Status code: 200 (OK)
+    - Body: A JSON object with the message: 'File uploaded successfully'
+
+  - If no file is uploaded:
+    - Status code: 400 (Bad Request) with the message: 'No file uploaded'
+
+  - If no nickname is provided:
+    - Status code: 400 (Bad Request) with the message: 'No nickname provided'
+
+  - If no token is provided:
+    - Status code: 400 (Bad Request) with the message: 'No token provided'
+
+  - If the provided token is invalid:
+    - Status code: 401 (Unauthorized) with the message: 'Invalid token'
+  `;
+  res.send(md.render(inputString));
 });
 
 export default router;
