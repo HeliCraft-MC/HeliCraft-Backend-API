@@ -9,7 +9,7 @@ import jwt from 'jsonwebtoken';
  * @return {string} The generated token.
  */
 function createToken(username:string, password:string, secret:string):string{
-    return jwt.sign({username, password}, secret, {expiresIn: '7d'});
+    return jwt.sign({username}, secret, {expiresIn: '7d'});
 }
 
 /**
