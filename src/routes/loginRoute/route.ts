@@ -37,7 +37,7 @@ router.post('/auth', async (req: Request, res: Response) => {
       res.status(400).send();
     }
   } else if (request === "validate") {
-    const result = verifyToken(token, mainConfig.config.secret);
+    const result = verifyToken(req.body.token, req.body.nickname, mainConfig.config.secret);
 
     if (!result) {
       res.status(401).send();

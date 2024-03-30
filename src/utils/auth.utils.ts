@@ -14,7 +14,7 @@ import { createToken } from "./token.utils";
 export async function proccessAuth(username:string, password:string, secret:string):Promise<any>{
     const result = checkPassword(username, password);
     if(await result){
-        const token = createToken(username, password, secret);
+        const token = createToken(username, secret);
         return token;
     }
     return false;

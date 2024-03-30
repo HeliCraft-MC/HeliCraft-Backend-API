@@ -46,7 +46,7 @@ router.post('/skin/upload', upload.single('file'), async (req: Request, res: Res
       return
     }
 
-    if(!verifyToken(req.body.token, mainConfig.config.secret)) {
+    if(!verifyToken(req.body.token, req.body.nickname, mainConfig.config.secret)) {
       res.status(401).send('Invalid token');
       return
     }

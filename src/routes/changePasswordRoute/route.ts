@@ -21,7 +21,7 @@ router.post('/newPassword', async (req: Request, res: Response) => {
         res.status(400).send();
         return;
     }
-    if(verifyToken(token, mainConfig.config.secret)){
+    if(verifyToken(req.body.token, req.body.nickname, mainConfig.config.secret)){
         const HASH = await bcrypt.hash(password, 10);
         const result = await changePassword(nickname, HASH);
         if(result){
