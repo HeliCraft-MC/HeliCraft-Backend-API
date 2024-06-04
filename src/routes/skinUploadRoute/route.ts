@@ -61,6 +61,7 @@ router.post('/skin/upload', upload.single('file'), async (req: Request, res: Res
     //integration for HeliCraftAutoSkin by Ktilis
     axios.get(`localhost:4418/update?player=${req.body.nickname}`).then((response) => {
       if(response.status === 200) return;
+      console.warn(response);
     }).catch((err) => {
       console.warn(err);
     })
