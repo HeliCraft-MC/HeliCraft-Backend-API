@@ -33,14 +33,17 @@ router.get('/skin/:nickname/head', async (req: Request, res: Response, next: Nex
     }
 
     const headBuffer = await sharp(skinFilePath).extract({ left: 8, top: 8, width: 8, height: 8 }).toBuffer();
+    const headBuffer2 = await sharp(skinFilePath).extract({ left: 40, top: 8, width: 8, height: 8 }).toBuffer();
 
     const img = await loadImage(headBuffer);
-    const canvas = createCanvas(128, 128);
+    const img2 = await loadImage(headBuffer2);
+    const canvas = createCanvas(256, 256);
     const ctx = canvas.getContext('2d');
     const pCanvas = createCanvas(16, 16);
     const pCtx = pCanvas.getContext('2d');
 
     pCtx.drawImage(img, 0, 0); // Draw the image on the canvas
+    pCtx.drawImage(img2, 0, 0);
 
     for (let y = 0; y < 8; y++) {
       for (let x = 0; x < 8; x++) {
@@ -49,10 +52,10 @@ router.get('/skin/:nickname/head', async (req: Request, res: Response, next: Nex
         const g = data[1];
         const b = data[2];
     
-        for (let i = 0; i < 16; i++) {
-          for (let j = 0; j < 16; j++) {
+        for (let i = 0; i < 32; i++) {
+          for (let j = 0; j < 32; j++) {
             ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
-            ctx.fillRect(x * 16 + i, y * 16 + j, 1, 1);
+            ctx.fillRect(x * 32 + i, y * 32 + j, 1, 1);
           }
         }
       }
