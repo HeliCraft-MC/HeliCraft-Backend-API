@@ -3,6 +3,7 @@ import fs from 'fs';
 import path from 'path';
 import skinConfig from '../../config/skinSystem.json';
 import sharp from 'sharp';
+import { createCanvas, loadImage } from 'canvas';
 
 const router = Router();
 const skinPath = skinConfig.skins.path;
@@ -33,8 +34,34 @@ router.get('/skin/:nickname/head', async (req: Request, res: Response, next: Nex
 
     const headBuffer = await sharp(skinFilePath).extract({ left: 8, top: 8, width: 8, height: 8 }).toBuffer();
 
+    const img = await loadImage(headBuffer);
+    const canvas = createCanvas(128, 128);
+    const ctx = canvas.getContext('2d');
+    const pCanvas = createCanvas(16, 16);
+    const pCtx = pCanvas.getContext('2d');
+
+    pCtx.drawImage(img, 0, 0); // Draw the image on the canvas
+
+    for (let y = 0; y < 8; y++) {
+      for (let x = 0; x < 8; x++) {
+        const data = pCtx.getImageData(x, y, 1, 1).data;
+        const r = data[0];
+        const g = data[1];
+        const b = data[2];
+    
+        for (let i = 0; i < 16; i++) {
+          for (let j = 0; j < 16; j++) {
+            ctx.fillStyle = `rgb(${r}, ${g}, ${b})`;
+            ctx.fillRect(x * 16 + i, y * 16 + j, 1, 1);
+          }
+        }
+      }
+    }
+
+    const resizedHeadBuffer = canvas.toBuffer('image/png');
+
     res.set('Content-Type', 'image/png');
-    res.send(headBuffer);
+    res.send(resizedHeadBuffer);
   } catch (err) {
     next(err);
   }
