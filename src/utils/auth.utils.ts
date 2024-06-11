@@ -1,5 +1,7 @@
 import checkPassword from "../database/functions/checkPassword";
 import { createToken } from "./token.utils";
+import getUserByUsername from "../database/functions/findUser";
+import createUser from "../database/functions/createUser";
 
 
 /**
@@ -18,4 +20,12 @@ export async function proccessAuth(username:string, password:string, secret:stri
         return token;
     }
     return false;
+}
+
+export async function register(username:string, password:string):Promise<any>{
+    if  (await getUserByUsername(username)) {
+        return false;
+    }
+
+    return createUser(username, password);
 }

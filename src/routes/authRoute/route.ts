@@ -1,7 +1,8 @@
 import { Router, Request, Response } from 'express';
 import mainConfig from '../../config/main.json';
-import { proccessAuth } from '../../utils/auth.utils';
+import { proccessAuth, register } from '../../utils/auth.utils';
 import { verifyToken } from '../../utils/token.utils';
+
 
 const md = require('markdown-it')()
 .use(require('markdown-it-multimd-table'), {
@@ -17,7 +18,8 @@ const router = Router();
 
 // Authentication route
 router.post('/auth', async (req: Request, res: Response) => {
-  const { request, nickname, password, token } = req.body;
+  try {
+    const { request, nickname, password, token } = req.body;
   console.log(req.body);
 
   if (request === "login") {
@@ -37,13 +39,28 @@ router.post('/auth', async (req: Request, res: Response) => {
       res.status(400).send();
     }
   } else if (request === "validate") {
-    const result = verifyToken(req.body.token, req.body.nickname, mainConfig.config.secret);
+    const result = verifyToken(token, nickname, mainConfig.config.secret);
 
     if (!result) {
       res.status(401).send();
     } else {
       res.status(200).send();
     }
+  } else if (request === "register") {
+    if (nickname && password) {
+      const result = await register(nickname, password);
+      if (!result) {
+        res.status(400).send();
+      } else {
+        res.status(200).send();
+      }
+    } else {
+      res.status(400).send();
+    }
+  }
+
+  } catch (error) {
+    res.status(400).send('e');
   }
 });
 
@@ -75,6 +92,12 @@ router.get('/docs/auth', (req: Request, res: Response) => {
   
   - If the request is "validate" and the provided token is invalid:
     - Status code: 401 (Unauthorized)
+  
+  - If the request is "register" and the provided nickname and password are valid:
+    - Status code: 200 (OK)
+  
+  - If the request is "register" and the provided nickname and password are invalid(user exists):
+    - Status code: 400 (Bad Request)
   
   - If the request is missing any required parameters:
     - Status code: 400 (Bad Request)
