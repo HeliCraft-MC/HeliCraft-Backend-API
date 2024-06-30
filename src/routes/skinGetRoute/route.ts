@@ -80,5 +80,24 @@ router.get('/docs/skin/:nickname', (req: Request, res: Response) => {
   res.send(md.render(inputString));
 });
 
+router.get('/docs/skinHash/:hash', (req: Request, res: Response) => {
+  const inputString = `## Route: GET /skin/:nickname
+
+  Retrieves the skin image for the specified user nickname.
+
+  ### URL Parameters
+  - \`hash\` (string): Hash of skin of user.
+
+  ### Response
+  - If the skin image for the specified hash exists:
+    - Status code: 200 (OK)
+    - Body: The skin image file
+
+  - If the skin image for the specified hash does not exist:
+    - Status code: 200 (OK) with the default skin image
+  `;
+  res.send(md.render(inputString));
+});
+
 
 export default router;
