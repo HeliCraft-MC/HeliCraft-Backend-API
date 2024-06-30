@@ -1,6 +1,11 @@
-import { dbConfig } from "../../database/database.types";
 
-interface dbMojangConfig extends dbConfig {
+interface dbMojangConfig {
+  host: string,
+  port: number,
+  user: {
+      name: string,
+      password: string
+  },
   database: {
     name: string;
     table: string;
@@ -11,7 +16,7 @@ interface dbMojangConfig extends dbConfig {
       UUID_WR: string;
     };
   };
-}
+};
 
 interface userMojang{
     username: string,

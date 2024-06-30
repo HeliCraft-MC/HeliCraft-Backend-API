@@ -12,7 +12,7 @@ export default async function getUserByUsername(username: string): Promise<mysql
   try {
     const result = await new Promise<mysql.RowDataPacket[]>((resolve, reject) => {
       connection.execute(
-        `SELECT * FROM ${database.database.table} WHERE ${database.database.columns.username} = ?`,
+        `SELECT * FROM ${database.database.tables.players.name} WHERE ${database.database.tables.players.columns.username} = ?`,
         [username],
         (err, result: mysql.RowDataPacket[]) => {
           if (err) {

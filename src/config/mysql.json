@@ -1,17 +1,29 @@
 {
     "mysql": {
         "host": "localhost",
-        "port": 3310,
+        "port": 3306,
         "user":{
-            "name": "root",
-            "password": "root"
+            "name": "test",
+            "password": "test"
         },
         "database": {
-            "name": "newAuth",
-            "table": "AUTH",
-            "columns": {
-                "username": "NICKNAME",
-                "password": "HASH"
+            "name": "hc2_test",
+            "tables": {
+                "players": {
+                    "name": "AUTH",
+                    "columns": {
+                        "username": "NICKNAME",
+                        "password": "HASH"
+                    }
+                },
+                "skins": {
+                    "name": "SKINS_CACHE",
+                    "columns": {
+                        "username": "NICKNAME",
+                        "hash": "SKIN_HASH",
+                        "last_updated": "LAST_UPDATED"
+                    }
+                }
             }
         }
 

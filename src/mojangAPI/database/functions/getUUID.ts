@@ -18,21 +18,22 @@ export default async (username: string): Promise<userMojang | undefined> => {
     };
     try {
         const result = await new Promise<userMojang>((resolve, reject) => {
-            connection.execute(
-                `SELECT * FROM ${database.database.table} WHERE ${database.database.columns.username} = ?`,
-                [username],
-                (err, result: mysql.RowDataPacket[]) => {
-                    if (err) {
-                        console.log(err);
-                        reject(err);
-                    } else {
-                        user.username = username;
-                        user.UUID = result[0].UUID;
-                        user.UUID_WR = result[0].UUID_WR;
-                        resolve(user);
+            if(connection)
+                connection.execute(
+                    `SELECT * FROM ${database.database.table} WHERE ${database.database.columns.username} = ?`,
+                    [username],
+                    (err, result: mysql.RowDataPacket[]) => {
+                        if (err) {
+                            console.log(err);
+                            reject(err);
+                        } else {
+                            user.username = username;
+                            user.UUID = result[0].UUID;
+                            user.UUID_WR = result[0].UUID_WR;
+                            resolve(user);
+                        }
                     }
-                }
-            );
+                );
         });
         return result;
     } catch (error) { 

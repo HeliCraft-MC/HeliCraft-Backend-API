@@ -16,7 +16,7 @@ async function givePassword(username: string): Promise<string> {
     throw new Error('User not found');
   }
 
-  const passwordProperty = database.database.columns.password;
+  const passwordProperty = database.database.tables.players.columns.password;
   const HASH = user[passwordProperty];
 
   if (!HASH) {

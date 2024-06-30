@@ -1,6 +1,6 @@
 {
     "skins":{
-        "path": "C:\\Users\\zxcvb\\Downloads\\ttemp",
+        "path": "/user/helicraft/skins",
         "nameFormat": "%s",
         "type": "png"
     }

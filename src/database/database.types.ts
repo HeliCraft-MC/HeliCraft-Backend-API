@@ -7,10 +7,22 @@ interface dbConfig {
     },
     database: {
         name: string,
-        table: string,
-        columns: {
-            username: string,
-            password: string
+        tables: {
+            players: {
+                name: string,
+                columns: {
+                    username: string,
+                    password: string
+                }
+            },
+            skins: {
+                name: string,
+                columns: {
+                    username: string,
+                    hash: string,
+                    last_updated: string
+                }
+            }
         }
     }
 };

@@ -3,8 +3,14 @@ import skinConfig from '../../config/skinSystem.json';
 import mainConfig from '../../config/main.json';
 import { verifyToken } from '../../utils/token.utils';
 import multer from 'multer';
-import sharp from 'sharp';
+import sharp, { bool } from 'sharp';
 import axios from 'axios';
+
+import { file_md5 } from '../../utils/hash.utils';
+import addNewSkin from '../../database/functions/skins/addNewSkin';
+import isUserExists from '../../database/functions/skins/findUserByUsername';
+import updateUserSkinHash from '../../database/functions/skins/updateUserSkinHash';
+
 
 const md = require('markdown-it')()
 .use(require('markdown-it-multimd-table'), {
@@ -57,6 +63,17 @@ router.post('/skin/upload', upload.single('file'), async (req: Request, res: Res
       .toFile(`${skinPath}/${req.body.nickname}.png`);
 
     res.status(200).json({ message: 'File uploaded successfully' });
+
+    // Generate skin hash for HeliCraftAutoSkin-Fabric-Client
+    file_md5(`${skinPath}/${req.body.nickname}.png`).then(async (hash) => {
+      await isUserExists(req.body.nickname).then((value) => {
+        if(value) {
+          return updateUserSkinHash(req.body.nickname, hash, String(Date.now()));
+        } else {
+          return addNewSkin(req.body.nickname, hash, String(Date.now()));
+        }
+      })
+    });
 
     //integration for HeliCraftAutoSkin by Ktilis
     axios.get(`localhost:4418/update?player=${req.body.nickname}`).then((response) => {
