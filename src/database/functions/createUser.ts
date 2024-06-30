@@ -1,4 +1,3 @@
-import mysql from 'mysql2';
 import database from '../database.config';
 import connection from './mysqlConnect';
 
@@ -12,7 +11,10 @@ import connection from './mysqlConnect';
 export default async function createUser(username: string, password: string): Promise<boolean> {
     try {
         const result = await connection.execute(
-            `INSERT INTO ${database.database.table} (${database.database.columns.username}, ${database.database.columns.password}) VALUES (?, ?)`,
+            `INSERT INTO ${database.database.tables.players.name} 
+            (${database.database.tables.players.columns.username}, 
+            ${database.database.tables.players.columns.password}) 
+            VALUES (?, ?)`,
             [username, password],
         );
         return true;
