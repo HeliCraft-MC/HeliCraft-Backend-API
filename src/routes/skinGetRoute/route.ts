@@ -81,7 +81,7 @@ router.get('/docs/skin/:nickname', (req: Request, res: Response) => {
 });
 
 router.get('/docs/skinHash/:hash', (req: Request, res: Response) => {
-  const inputString = `## Route: GET /skin/:nickname
+  const inputString = `## Route: GET /skinHash/:nickname
 
   Retrieves the skin image for the specified user nickname.
 

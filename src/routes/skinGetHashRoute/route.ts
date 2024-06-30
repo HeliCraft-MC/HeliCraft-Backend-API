@@ -32,7 +32,7 @@ router.get('/skinGetHash/:nickname', async (req: Request, res: Response, next: N
 });
 
 router.get('/docs/skinGetHash/:nickname', (req: Request, res: Response) => {
-  const inputString = `## Route: GET /skin/:nickname
+  const inputString = `## Route: GET /skinGetHash/:nickname
 
   Retrieves the skin image hash for the specified user nickname.
 
